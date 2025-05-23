@@ -2,12 +2,18 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 
 const CurrencyContext = createContext();
 
-export const useCurrency = () => useContext(CurrencyContext);
+const conversionRates = {
+  USD: 1,
+  EUR: 0.93,
+  GBP: 0.8,
+};
+
+let defaultCurrency = "USD";
 
 export const CurrencyProvider = ({ children }) => {
-  const [currency, setCurrency] = useState("USD");
+  const [prevCurrency, setPrevCurrency] = useState(defaultCurrency);
+  const [currency, setCurrency] = useState(defaultCurrency);
 
-  // Load saved currency from localStorage
   useEffect(() => {
     const saved = localStorage.getItem("currency");
     if (saved) setCurrency(saved);
@@ -19,8 +25,22 @@ export const CurrencyProvider = ({ children }) => {
   };
 
   return (
-    <CurrencyContext.Provider value={{ currency, changeCurrency }}>
+    <CurrencyContext.Provider
+      value={{
+        currency,
+        changeCurrency,
+        conversionRates,
+        setPrevCurrency,
+        setCurrency,
+        prevCurrency,
+      }}>
       {children}
     </CurrencyContext.Provider>
   );
 };
+
+const useCurrency = () => {
+  return useContext(CurrencyContext);
+};
+
+export { useCurrency };

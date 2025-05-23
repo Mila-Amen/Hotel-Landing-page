@@ -9,6 +9,8 @@ import {
   Instagram,
   Youtube,
 } from "lucide-react";
+import { Link } from "react-router-dom";
+
 import emailjs from "emailjs-com";
 
 export default function Footer() {
@@ -29,12 +31,12 @@ export default function Footer() {
 
     emailjs
       .send(
-        "service_j2sur5t", // Replace with your EmailJS service ID
-        "template_gd6efhj", // Replace with your EmailJS template ID
+        "service_j2sur5t",
+        "template_gd6efhj",
         {
-          email: email, // Use the dynamic email entered by the user
+          email: email,
         },
-        "7s3fyFXl9tvcHb_P8" // Replace with your EmailJS public key
+        "7s3fyFXl9tvcHb_P8"
       )
       .then(
         (response) => {
@@ -56,7 +58,6 @@ export default function Footer() {
       <footer className="bg-[#232323] text-white">
         <div className="container mx-auto px-4 py-12">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* About Section */}
             <div>
               <h3 className="text-xl font-bold mb-4">
                 About Royal Grand Hotel
@@ -83,7 +84,7 @@ export default function Footer() {
             </div>
 
 
-            {/* Contact Info */}
+
             <div>
               <h3 className="text-xl font-bold mb-4">Contact Info</h3>
               <div className="space-y-4">
@@ -112,54 +113,59 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* Quick Links */}
+
             <div>
               <h3 className="text-xl font-bold mb-4">Quick Links</h3>
               <ul className="space-y-2">
                 <li>
-                  <a
-                    href="/rooms"
+                  <Link
+                    to="/rooms"
+                    onClick={() => window.scrollTo(0, 0)}
                     className="text-gray-300 hover:text-[#8E7037] transition-colors"
                   >
                     Our Rooms
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    href="/restaurant"
+                  <Link
+                    to="/restaurant"
+                    onClick={() => window.scrollTo(0, 0)}
                     className="text-gray-300 hover:text-[#8E7037] transition-colors"
                   >
                     Restaurant
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    href="/gallery"
+                  <Link
+                    to="/gallery"
+                    onClick={() => window.scrollTo(0, 0)}
                     className="text-gray-300 hover:text-[#8E7037] transition-colors"
                   >
                     Gallery
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    href="/about"
+                  <Link
+                    to="/about"
+                    onClick={() => window.scrollTo(0, 0)}
                     className="text-gray-300 hover:text-[#8E7037] transition-colors"
                   >
                     About Us
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    href="/contact"
+                  <Link
+                    to="/contact"
+                    onClick={() => window.scrollTo(0, 0)}
                     className="text-gray-300 hover:text-[#8E7037] transition-colors"
                   >
                     Contact
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
 
-            {/* Newsletter */}
+
             <div>
               <h3 className="text-xl font-bold mb-4">Newsletter</h3>
               <p className="text-gray-300 mb-4">
@@ -171,11 +177,11 @@ export default function Footer() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Your email address"
-                  className="w-full px-4 py-2 rounded bg-[#3e3e3e] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white"
+                  className="w-full px-4 py-2 bg-[#3e3e3e] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white"
                 />
                 <button
                   type="submit"
-                  className="w-full bg-[#8E7037] text-white px-4 py-2 rounded font-semibold hover:bg-[#3e3e3e] transition-colors"
+                  className="w-full bg-[#8E7037] text-white px-4 py-2 font-semibold hover:bg-[#3e3e3e] transition-colors"
                 >
                   Subscribe
                 </button>
@@ -191,7 +197,7 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom Footer */}
+
         <div className="border-t border-[#8E7037]">
           <div className="container mx-auto px-4 py-6">
             <div className="flex flex-col md:flex-row justify-between items-center">

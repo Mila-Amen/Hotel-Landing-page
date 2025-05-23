@@ -1,11 +1,8 @@
-
 import RoomModel from "../models/roomsSchema.js";
-
 export const getRoomBySlug = async (req, res, next) => {
     try {
         const { slug } = req.params;
         const room = await RoomModel.findOne({ slug });
-
         if (room) {
             res.json({ success: true, data: room });
         } else {
@@ -18,7 +15,6 @@ export const getRoomBySlug = async (req, res, next) => {
 
 export const getAllRooms = async (req, res, next) => {
     try {
-
         const rooms = await RoomModel.find();
 
         if (rooms) {
@@ -31,7 +27,6 @@ export const getAllRooms = async (req, res, next) => {
     }
 };
 
-
 export const createRoom = async (req, res, next) => {
     try {
         const {
@@ -43,7 +38,8 @@ export const createRoom = async (req, res, next) => {
             defaultPrice,
             packages,
             ratings,
-            calendar
+            calendar,
+            additionalDetails
         } = req.body;
 
         const newRoom = new RoomModel({
@@ -56,9 +52,7 @@ export const createRoom = async (req, res, next) => {
             packages: packages || [],
             ratings: ratings || [],
             calendar: calendar || [],
-
-            // bookings: bookings || []
-
+            additionalDetails
         });
 
         const savedRoom = await newRoom.save();
@@ -69,14 +63,11 @@ export const createRoom = async (req, res, next) => {
     }
 };
 
-
-
 export const getAvailableRooms = async (req, res, next) => {
     try {
         const { start, end } = req.query;
         const startDate = new Date(start);
         const endDate = new Date(end);
-
         const availableRooms = await RoomModel.find({
             bookings: {
                 $not: {
@@ -96,7 +87,6 @@ export const getAvailableRooms = async (req, res, next) => {
 
 export const updateRoom = async (req, res, next) => {
     try {
-        console.log(req.body, req.params.slug)
         const updatedRoom = await RoomModel.findByIdAndUpdate(req.params.slug, req.body, { new: true });
         if (!updatedRoom) return res.status(404).json({ success: false, message: "Room not found" });
         res.json({ success: true, data: updatedRoom });

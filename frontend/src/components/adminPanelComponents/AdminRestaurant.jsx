@@ -26,8 +26,10 @@ export default function AdminRestaurant() {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const baseUrl =
+  import.meta.env.MODE === "development" ? "http://localhost:5005" : "";
 
-  const API = "http://localhost:5005/menu/foods";
+  const API = baseUrl + "/menu/foods";
 
   useEffect(() => {
     fetchMenuItems();
@@ -117,7 +119,6 @@ export default function AdminRestaurant() {
 
   return (
     <div className="p-4 bg-gray-50 min-h-screen">
-      {/* Summary Cards */}
       <motion.div
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6"
         initial={{ opacity: 0, y: 20 }}
@@ -146,8 +147,7 @@ export default function AdminRestaurant() {
 
       <div className="overflow-x-auto">
         <div className="min-w-[1000px]">
-          {/* Header */}
-          <div className="grid grid-cols-[1fr_100px_2fr_200px_100px_100px] gap-2 bg-[#f8efe0] text-[#8E7037] font-semibold px-4 py-3 rounded-t-lg mb-2 text-sm">
+          <div className="grid grid-cols-[1fr_100px_2fr_200px_100px_100px] gap-2 bg-[#f8efe0] text-[#8E7037] font-semibold px-4 py-3 mb-2 text-sm">
             <span>Name</span>
             <span>Price</span>
             <div className="flex justify-center">
@@ -160,9 +160,8 @@ export default function AdminRestaurant() {
             <span className="text-center">Action</span>
           </div>
 
-          {/* Add New Item */}
           <motion.div
-            className="grid grid-cols-[1fr_100px_2fr_200px_100px_100px] gap-2 bg-white p-4 mb-2 rounded-lg shadow text-sm items-center"
+            className="grid grid-cols-[1fr_100px_2fr_200px_100px_100px] gap-2 bg-white p-4 mb-2  shadow text-sm items-center"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
           >
@@ -217,7 +216,6 @@ export default function AdminRestaurant() {
             </button>
           </motion.div>
 
-          {/* Items */}
           {loading ? (
             <div className="text-center py-4 text-sm">Loading...</div>
           ) : error ? (
@@ -228,7 +226,7 @@ export default function AdminRestaurant() {
             menuItems.map((item, index) => (
               <motion.div
                 key={item._id}
-                className="grid grid-cols-[1fr_100px_2fr_200px_100px_100px] gap-2 bg-white p-4 mb-2 rounded-lg shadow text-sm items-center"
+                className="grid grid-cols-[1fr_100px_2fr_200px_100px_100px] gap-2 bg-white p-4 mb-2 shadow text-sm items-center"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05 }}
@@ -292,7 +290,7 @@ export default function AdminRestaurant() {
                       <img
                         src={item.img}
                         alt={item.name}
-                        className="w-24 h-20 object-cover rounded shadow-sm"
+                        className="w-24 h-20 object-cover shadow-sm"
                       />
                     </div>
                     <span>{item.title}</span>

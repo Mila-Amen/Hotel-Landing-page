@@ -12,11 +12,13 @@ export default function HomePageRooms() {
   const { currency } = useCurrency();
   const currencySymbols = { USD: "$", EUR: "€", GBP: "£" };
   const [expandedRoom, setExpandedRoom] = useState(null);
+  const baseUrl =
+  import.meta.env.MODE === "development" ? "http://localhost:5005" : "";
 
   useEffect(() => {
     const fetchRoomData = async () => {
       try {
-        const response = await axios.get("http://localhost:5005/room");
+        const response = await axios.get(baseUrl + "/room");
         const allRooms = response.data.data;
 
         const filtered = allRooms
@@ -106,7 +108,7 @@ export default function HomePageRooms() {
 
                 <Link
                   to={`/rooms/${room.slug}`}
-                  className="inline-block mx-auto text-sm text-white bg-[#8E7037] font-semibold border border-[#8E7037] px-4 py-2 hover:bg-white hover:text-[#8E7037] transition rounded"
+                  className="inline-block mx-auto text-sm text-white bg-[#8E7037] border border-[#8E7037] px-4 py-2 hover:bg-white hover:text-[#8E7037] transition"
                 >
                   Book Now
                 </Link>

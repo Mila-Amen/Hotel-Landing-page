@@ -21,7 +21,7 @@ const GuestDetails = ({ onNext, setGuestData }) => {
 
   useEffect(() => {
     if (guest) {
-      console.log("GUEST DATA:", guest); // Debug line to check key names
+      console.log("GUEST DATA:", guest);
       setFormData((prev) => ({
         ...prev,
         firstName: guest.firstName || "",
@@ -30,7 +30,7 @@ const GuestDetails = ({ onNext, setGuestData }) => {
         phonenumber: guest.phonenumber || "",
         address: guest.address || "",
         city: guest.city || "",
-        zipcode: guest.zipcode  || "",
+        zipcode: guest.zipcode || "",
         country: guest.country || "",
         specialRequests: guest.specialRequests || "",
       }));
@@ -55,12 +55,15 @@ const GuestDetails = ({ onNext, setGuestData }) => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.firstName.trim()) newErrors.firstName = "First name is required";
+    if (!formData.firstName.trim())
+      newErrors.firstName = "First name is required";
     if (!formData.lastName.trim()) newErrors.lastName = "Last name is required";
 
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(formData.email)) {
+    } else if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(formData.email)
+    ) {
       newErrors.email = "Please enter a valid email address";
     }
 
@@ -89,8 +92,16 @@ const GuestDetails = ({ onNext, setGuestData }) => {
   };
 
   const countries = [
-    "United States", "Canada", "United Kingdom", "Australia",
-    "Germany", "France", "Spain", "Italy", "Japan", "China"
+    "United States",
+    "Canada",
+    "United Kingdom",
+    "Australia",
+    "Germany",
+    "France",
+    "Spain",
+    "Italy",
+    "Japan",
+    "China",
   ];
 
   const inputClasses =
@@ -103,11 +114,11 @@ const GuestDetails = ({ onNext, setGuestData }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="bg-white shadow-lg p-8"
+      className="bg-white shadow-lg p-4 sm:p-6 md:p-8"
     >
       <h2 className="text-2xl font-bold text-gray-800 mb-6">Guest Details</h2>
       <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-6">
           <div>
             <label className="block text-gray-700 mb-2">First Name</label>
             <div className="relative">
@@ -118,13 +129,18 @@ const GuestDetails = ({ onNext, setGuestData }) => {
                 value={formData.firstName}
                 onChange={handleChange}
                 className={`${inputClasses} pl-10 ${
-                  errors.firstName ? "border-red-500 focus:ring-red-500" : "border-gray-300"
+                  errors.firstName
+                    ? "border-red-500 focus:ring-red-500"
+                    : "border-gray-300"
                 }`}
                 placeholder="John"
               />
             </div>
-            {errors.firstName && <p className={errorClasses}>{errors.firstName}</p>}
+            {errors.firstName && (
+              <p className={errorClasses}>{errors.firstName}</p>
+            )}
           </div>
+
           <div>
             <label className="block text-gray-700 mb-2">Last Name</label>
             <div className="relative">
@@ -135,16 +151,20 @@ const GuestDetails = ({ onNext, setGuestData }) => {
                 value={formData.lastName}
                 onChange={handleChange}
                 className={`${inputClasses} pl-10 ${
-                  errors.lastName ? "border-red-500 focus:ring-red-500" : "border-gray-300"
+                  errors.lastName
+                    ? "border-red-500 focus:ring-red-500"
+                    : "border-gray-300"
                 }`}
                 placeholder="Doe"
               />
             </div>
-            {errors.lastName && <p className={errorClasses}>{errors.lastName}</p>}
+            {errors.lastName && (
+              <p className={errorClasses}>{errors.lastName}</p>
+            )}
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-6">
           <div>
             <label className="block text-gray-700 mb-2">Email</label>
             <div className="relative">
@@ -155,13 +175,16 @@ const GuestDetails = ({ onNext, setGuestData }) => {
                 value={formData.email}
                 onChange={handleChange}
                 className={`${inputClasses} pl-10 ${
-                  errors.email ? "border-red-500 focus:ring-red-500" : "border-gray-300"
+                  errors.email
+                    ? "border-red-500 focus:ring-red-500"
+                    : "border-gray-300"
                 }`}
                 placeholder="john.doe@example.com"
               />
             </div>
             {errors.email && <p className={errorClasses}>{errors.email}</p>}
           </div>
+
           <div>
             <label className="block text-gray-700 mb-2">Phone Number</label>
             <div className="relative">
@@ -172,12 +195,16 @@ const GuestDetails = ({ onNext, setGuestData }) => {
                 value={formData.phonenumber}
                 onChange={handleChange}
                 className={`${inputClasses} pl-10 ${
-                  errors.phonenumber ? "border-red-500 focus:ring-red-500" : "border-gray-300"
+                  errors.phonenumber
+                    ? "border-red-500 focus:ring-red-500"
+                    : "border-gray-300"
                 }`}
                 placeholder="+1 123 456 7890"
               />
             </div>
-            {errors.phonenumber && <p className={errorClasses}>{errors.phonenumber}</p>}
+            {errors.phonenumber && (
+              <p className={errorClasses}>{errors.phonenumber}</p>
+            )}
           </div>
         </div>
 
@@ -191,7 +218,9 @@ const GuestDetails = ({ onNext, setGuestData }) => {
               value={formData.address}
               onChange={handleChange}
               className={`${inputClasses} pl-10 ${
-                errors.address ? "border-red-500 focus:ring-red-500" : "border-gray-300"
+                errors.address
+                  ? "border-red-500 focus:ring-red-500"
+                  : "border-gray-300"
               }`}
               placeholder="123 Main St"
             />
@@ -199,7 +228,7 @@ const GuestDetails = ({ onNext, setGuestData }) => {
           {errors.address && <p className={errorClasses}>{errors.address}</p>}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mb-6">
           <div>
             <label className="block text-gray-700 mb-2">City</label>
             <input
@@ -208,12 +237,15 @@ const GuestDetails = ({ onNext, setGuestData }) => {
               value={formData.city}
               onChange={handleChange}
               className={`${inputClasses} ${
-                errors.city ? "border-red-500 focus:ring-red-500" : "border-gray-300"
+                errors.city
+                  ? "border-red-500 focus:ring-red-500"
+                  : "border-gray-300"
               }`}
               placeholder="New York"
             />
             {errors.city && <p className={errorClasses}>{errors.city}</p>}
           </div>
+
           <div>
             <label className="block text-gray-700 mb-2">Zip Code</label>
             <input
@@ -222,12 +254,15 @@ const GuestDetails = ({ onNext, setGuestData }) => {
               value={formData.zipcode}
               onChange={handleChange}
               className={`${inputClasses} ${
-                errors.zipcode ? "border-red-500 focus:ring-red-500" : "border-gray-300"
+                errors.zipcode
+                  ? "border-red-500 focus:ring-red-500"
+                  : "border-gray-300"
               }`}
               placeholder="10001"
             />
             {errors.zipcode && <p className={errorClasses}>{errors.zipcode}</p>}
           </div>
+
           <div>
             <label className="block text-gray-700 mb-2">Country</label>
             <select
@@ -235,7 +270,9 @@ const GuestDetails = ({ onNext, setGuestData }) => {
               value={formData.country}
               onChange={handleChange}
               className={`${inputClasses} ${
-                errors.country ? "border-red-500 focus:ring-red-500" : "border-gray-300"
+                errors.country
+                  ? "border-red-500 focus:ring-red-500"
+                  : "border-gray-300"
               }`}
             >
               <option value="">Select Country</option>
@@ -254,7 +291,10 @@ const GuestDetails = ({ onNext, setGuestData }) => {
             Special Requests (Optional)
           </label>
           <div className="relative">
-            <MessageSquare size={18} className="absolute left-3 top-4 text-gray-400" />
+            <MessageSquare
+              size={18}
+              className="absolute left-3 top-4 text-gray-400"
+            />
             <textarea
               name="specialRequests"
               value={formData.specialRequests}
@@ -265,13 +305,12 @@ const GuestDetails = ({ onNext, setGuestData }) => {
           </div>
         </div>
 
-        <div className="flex justify-end">
+        <div className="flex justify-center sm:justify-end">
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             type="submit"
-            className="bg-[#8E7037] text-white px-8 py-3 font-semibold 
-              hover:bg-[#7a602f] transition-all duration-300 shadow-md"
+            className="w-full sm:w-auto px-6 py-3 bg-[#8E7037] text-white border border-[#8E7037] hover:bg-white hover:text-[#8E7037] transition-colors duration-200"
           >
             Continue to Payment
           </motion.button>

@@ -6,6 +6,8 @@ const AdminGuest = () => {
   const [guests, setGuests] = useState([]);
   const [editingGuestId, setEditingGuestId] = useState(null);
   const [editedGuest, setEditedGuest] = useState({});
+  const baseUrl =
+  import.meta.env.MODE === "development" ? "http://localhost:5005" : "";
 
   useEffect(() => {
     fetchGuests();
@@ -14,7 +16,7 @@ const AdminGuest = () => {
   const fetchGuests = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get("http://localhost:5005/guest", {
+      const res = await axios.get(baseUrl + "/guest", {
         headers: { token },
       });
       setGuests(res.data.data);
@@ -26,7 +28,7 @@ const AdminGuest = () => {
   const deleteGuest = async (id) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:5005/guest/${id}`, {
+      await axios.delete(baseUrl + `/guest/${id}`, {
         headers: { token },
       });
       fetchGuests();
@@ -48,7 +50,7 @@ const AdminGuest = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `http://localhost:5005/guest/${editingGuestId}`,
+        baseUrl + `/guest/${editingGuestId}`,
         editedGuest,
         { headers: { token } }
       );
@@ -61,7 +63,6 @@ const AdminGuest = () => {
 
   return (
     <div className="p-4 bg-gray-50 min-h-screen">
-      {/* Total Guests */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div className="bg-white rounded-lg shadow p-6 border-l-4 border-[#8E7037]">
           <p className="text-sm font-medium text-gray-500">Total Guests</p>
@@ -71,30 +72,24 @@ const AdminGuest = () => {
         </div>
       </div>
 
-      {/* Table with horizontal scroll */}
       <div className="overflow-x-auto">
         <div className="min-w-[1000px]">
-          {/* Table Header */}
-          <div className="grid grid-cols-10 gap-2 bg-[#f8efe0] text-[#8E7037] font-semibold px-4 py-3 rounded-t-lg mb-2 text-sm">
+          <div className="grid grid-cols-10 gap-2 bg-[#f8efe0] text-[#8E7037] font-semibold px-4 py-3  mb-2 text-sm">
             <span>First Name</span>
             <span>Last Name</span>
             <span>Country</span>
             <span>City</span>
-                        <span>Phone</span>
-
+            <span>Phone</span>
             <span>Zip</span>
             <span>Email</span>
             <span>role</span>
-
-
             <span className="col-span-2 text-center">Actions</span>
           </div>
 
-          {/* Guest Rows */}
           {guests.map((guest) => (
             <div
               key={guest._id}
-              className="grid grid-cols-10 gap-2   sm:grid-cols-10 items-center bg-white p-4 mb-2 rounded-lg shadow text-sm"
+              className="grid grid-cols-10 gap-2  hover:bg-gray-50 sm:grid-cols-10 items-center bg-white p-4 mb-2  shadow text-sm"
             >
               {editingGuestId === guest._id ? (
                 <>
@@ -102,53 +97,53 @@ const AdminGuest = () => {
                     type="text"
                     name="firstName"
                     value={editedGuest.firstName}
-                    onChange={handleInputChange}
+                    readonly
                     className="border-gray-300 p-3 shadow-sm w-full bg-gray-100"
                   />
                   <input
                     type="text"
                     name="lastName"
                     value={editedGuest.lastName}
-                    onChange={handleInputChange}
+                    readonly
                     className="border-gray-300 p-3 shadow-sm w-full bg-gray-100"
                   />
-                 
+
                   <input
                     type="text"
                     name="country"
                     value={editedGuest.country}
-                    onChange={handleInputChange}
+                    readonly
                     className="border-gray-300 p-3 shadow-sm w-full bg-gray-100"
                   />
                   <input
                     type="text"
                     name="city"
                     value={editedGuest.city}
-                    onChange={handleInputChange}
+                    readonly
                     className="border-gray-300 p-3 shadow-sm w-full bg-gray-100"
                   />
                   <input
                     type="text"
                     name="phonenumber"
                     value={editedGuest.phonenumber}
-                    onChange={handleInputChange}
+                    readonly
                     className="border-gray-300 p-3 shadow-sm w-full bg-gray-100"
                   />
                   <input
                     type="text"
                     name="zipcode"
                     value={editedGuest.zipcode}
-                    onChange={handleInputChange}
+                    readonly
                     className="border-gray-300 p-3 shadow-sm w-full bg-gray-100"
                   />
                   <input
                     type="email"
                     name="email"
                     value={editedGuest.email}
-                    onChange={handleInputChange}
+                    readonly
                     className="border-gray-300 p-3 shadow-sm w-full bg-gray-100"
                   />
-                    <input
+                  <input
                     type="text"
                     name="role"
                     value={editedGuest.role}
@@ -176,10 +171,12 @@ const AdminGuest = () => {
                   <span>{guest.lastName}</span>
                   <span>{guest.country}</span>
                   <span className="truncate break-words">{guest.city}</span>
-                 <span className="truncate break-words">{guest.phonenumber}</span>
+                  <span className="truncate break-words">
+                    {guest.phonenumber}
+                  </span>
 
                   <span>{guest.zipcode}</span>
-                  <span className="truncate break-words" >{guest.email}</span>
+                  <span className="truncate break-words">{guest.email}</span>
                   <span className="whitespace-nowrap">{guest.role}</span>
 
                   <div className="flex gap-4 col-span-2 justify-center">

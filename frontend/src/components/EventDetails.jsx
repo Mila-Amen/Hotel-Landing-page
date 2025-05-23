@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { useCart } from "../context/CartContext";
 
 function EventDetails() {
-  const { currency } = useCurrency();
+  const { currency, conversionRates } = useCurrency();
   const { id } = useParams();
   const { i18n, t } = useTranslation();
   const { addToCart } = useCart();
@@ -19,10 +19,12 @@ function EventDetails() {
   const [event, setEvent] = useState(null);
   const [ticketCount, setTicketCount] = useState(1);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const baseUrl =
+  import.meta.env.MODE === "development" ? "http://localhost:5005" : "";
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5005/events/${id}`)
+      .get(baseUrl + `/events/${id}`)
       .then((res) => setEvent(res.data))
       .catch((err) => console.error("Error fetching event:", err));
   }, [id]);
@@ -45,11 +47,11 @@ function EventDetails() {
       price: event.price,
       quantity: ticketCount,
       image: event.image,
-      totalPrice: event.price * ticketCount,
+      totalPrice: event.price * ticketCount * conversionRates[currency],
+
       date: event.date,
     });
 
-    /* navigate("/checkout"); */
     const token = localStorage.getItem("token");
     navigate(token ? "/checkout" : "/login");
     console.log("Token:", localStorage.getItem("token"));
@@ -68,14 +70,13 @@ function EventDetails() {
       <HeroSection
         title="Events"
         subtitle="Experience Unforgettable Moments."
-        backgroundImage="/src/assets/heroImage.jpg"
+        backgroundImage="/heroImage.jpg"
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <button
           onClick={() => navigate("/events")}
-          className="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors group"
-        >
+          className="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors group">
           <ArrowLeft
             size={18}
             className="mr-2 group-hover:-translate-x-1 transition-transform duration-200"
@@ -92,8 +93,13 @@ function EventDetails() {
                 <div
                   className={`absolute inset-0 bg-gray-200 animate-pulse ${
                     isImageLoaded ? "hidden" : "block"
-                  }`}
-                ></div>
+                  }`}></div>
+
+                <div
+                  className={`absolute inset-0 bg-gray-200 animate-pulse ${
+                    isImageLoaded ? "hidden" : "block"
+                  }`}></div>
+
                 <img
                   src={event.image}
                   alt={event.title.en}
@@ -120,7 +126,7 @@ function EventDetails() {
                 <h2 className="text-xl font-semibold text-gray-900">
                   About This Event
                 </h2>
-                <p className="text-gray-700 leading-relaxed text-lg">
+                <p className="text-gray-700 leading-relaxed text-lg text-justify">
                   {event.excerpt.en}
                 </p>
               </div>
@@ -138,7 +144,7 @@ function EventDetails() {
                   <span className="text-gray-700">Price per ticket</span>
                   <span className="text-2xl font-semibold text-gray-900">
                     {currencySymbols[currency]}
-                    {event.price.toFixed(2)}
+                    {(event.price * conversionRates[currency]).toFixed(2)}
                   </span>
                 </div>
 
@@ -150,8 +156,7 @@ function EventDetails() {
                     <button
                       onClick={decrement}
                       className="w-10 h-10 rounded-full flex items-center justify-center bg-gray-100 hover:bg-gray-200 transition-colors"
-                      aria-label="Decrease ticket count"
-                    >
+                      aria-label="Decrease ticket count">
                       <Minus size={18} className="text-gray-700" />
                     </button>
 
@@ -162,8 +167,7 @@ function EventDetails() {
                     <button
                       onClick={increment}
                       className="w-10 h-10 rounded-full flex items-center justify-center bg-gray-100 hover:bg-gray-200 transition-colors"
-                      aria-label="Increase ticket count"
-                    >
+                      aria-label="Increase ticket count">
                       <Plus size={18} className="text-gray-700" />
                     </button>
                   </div>
@@ -174,7 +178,11 @@ function EventDetails() {
                   <div className="text-right">
                     <span className="text-2xl font-bold text-gray-900 block">
                       {currencySymbols[currency]}
-                      {(event.price * ticketCount).toFixed(2)}
+                      {(
+                        event.price *
+                        ticketCount *
+                        conversionRates[currency]
+                      ).toFixed(2)}
                     </span>
                     <span className="text-xs text-gray-500 block mt-1">
                       All taxes included
@@ -184,8 +192,7 @@ function EventDetails() {
 
                 <button
                   onClick={handleBookNow}
-                  className="w-full py-3 px-6 bg-[#8E7037] text-white text-lg font-semibold hover:bg-[#705832] transition-colors"
-                >
+                  className="w-full py-3 px-6 bg-[#8E7037] text-white text-lg font-semibold hover:bg-[#705832] transition-colors">
                   Book Now
                 </button>
               </div>

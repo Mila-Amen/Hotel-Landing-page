@@ -8,11 +8,13 @@ export const GuestProvider = ({ children }) => {
   const [guest, setGuest] = useState({});
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const baseUrl =
+  import.meta.env.MODE === "development" ? "http://localhost:5005" : "";
 
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch("http://localhost:5005/guest/verifytoken",{
+    fetch(baseUrl + "/guest/verifytoken",{
       method:"get",
       headers:{token:token}
     }).then(res=>res.json( 
@@ -21,12 +23,13 @@ export const GuestProvider = ({ children }) => {
       if (result.success) {
         setIsLoggedIn(true);
         setGuest(result.data);
+
       } else {
         setIsLoggedIn(false);
         setGuest(null);
+       
       }   
      })
-    
     
 
     setLoading(false);
@@ -35,16 +38,10 @@ export const GuestProvider = ({ children }) => {
   const login = (token, guestData) => {
     localStorage.setItem("token", token); 
 
-
-
-
-
-    //localStorage.setItem("guestData", JSON.stringify(guestData)); 
     setIsLoggedIn(true);
     setGuest(guestData.data); 
     navigate("/profile");
   };
-  // Handle logout
   const logout = () => {
     localStorage.removeItem("token"); 
     localStorage.removeItem("guestData"); 
@@ -54,8 +51,7 @@ export const GuestProvider = ({ children }) => {
   };
 
   const register = (guestData) => {
-    // Assuming registration API is handled elsewhere
-    // You can directly call your API here, then call login if needed
+    
   };
 
   return (

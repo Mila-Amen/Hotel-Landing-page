@@ -7,23 +7,26 @@ import RoomTabs from "./roomDetailComponents/RoomTabs.jsx";
 import BookingForm from "./roomDetailComponents/BookingForm.jsx";
 import { useCart } from "../context/CartContext";
 import { useRoomDetail } from "../context/RoomDetailContext.jsx";
-export default function RoomDetails() {
+import HeroSection from "../components/HeroSection";
 
-  const { roomData, setRoomData, bookingData, setBookingData } = useRoomDetail();
+export default function RoomDetails() {
+  const { roomData, setRoomData, bookingData, setBookingData } =
+    useRoomDetail();
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const { currency } = useCurrency();
+  const { currency, conversionRates } = useCurrency();
   const currencySymbols = { USD: "$", EUR: "€", GBP: "£" };
-  const calendarRef = useRef(null)
+  const calendarRef = useRef(null);
   const { addToCart } = useCart();
-
   const { roomSlug } = useParams();
   const navigate = useNavigate();
+  const baseUrl =
+    import.meta.env.MODE === "development" ? "http://localhost:5005" : "";
 
   useEffect(() => {
     const fetchRoom = async () => {
       try {
-        const res = await axios.get(`http://localhost:5005/room/${roomSlug}`);
+        const res = await axios.get(baseUrl + `/room/${roomSlug}`);
         setRoomData(res.data.data);
       } catch (error) {
         console.error("Error fetching room:", error);
@@ -79,60 +82,44 @@ export default function RoomDetails() {
       totalPrice += (numAdults - 2) * extraAdultFee * nights;
     }
     totalPrice += numChildren * childFee * nights;
-
+    totalPrice *= conversionRates[currency];
     const payload = {
+      _id: roomData._id,
       slug: roomSlug,
+      title: roomData.title,
       arrivalDate: arrive,
       departureDate: departure,
       numAdults,
       numChildren,
-      selectedPackages: [],
+
       totalPrice,
       nights,
-      image: roomData.images[0],
+      images: [roomData.images[0]],
     };
     addToCart(payload);
     const token = localStorage.getItem("token");
     navigate(token ? "/checkout" : "/login");
     console.log("Token:", localStorage.getItem("token"));
-
   };
   if (loading) return <div>Loading...</div>;
   if (!roomData) return <div>Room information not found.</div>;
 
   return (
-    <div className="relative" >
-      <section
-        className="relative top-0 left-0 w-full h-[80vh] md:h-[40vh] bg-cover bg-center flex items-center justify-center"
-        style={{ backgroundImage: "url('/src/assets/aboutHero.jpg')" }}
-      >
-        <div className="absolute inset-0 bg-opacity-30"></div>
-        <div className="relative text-white text-center px-4 sm:px-6 md:px-10 pt-25">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold uppercase"
-            style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.8)" }}>
-            {roomData.title}
-          </h1>
-          <p
-            className="text-lg mt-2"
-            style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.8)" }}
-          >
-            Royal Grand Hotel is where timeless elegance meets modern luxury in every detail.
-          </p>
-        </div>
-      </section>
-
-      <div >
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-6 max-w-6xl mx-auto m-5 ">
+    <div className="relative overflow-x-hidden w-full">
+      <HeroSection
+        title={roomData.title}
+        subtitle=" Royal Grand Hotel is where timeless elegance meets modern luxury in every detail."
+        backgroundImage="/aboutHero.jpg"
+      />
 
 
-        {/* Room Gallery */}
+      <div className="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 p-4">
+
         <RoomGallery
           images={roomData.images}
           currentImageIndex={currentImageIndex}
           setCurrentImageIndex={setCurrentImageIndex}
         />
-        {/* Booking Form */}
         <BookingForm
           bookingData={bookingData}
           setBookingData={setBookingData}
@@ -142,13 +129,9 @@ export default function RoomDetails() {
           currencySymbols={currencySymbols}
         />
       </div>
-      {/* Room Tabs Section */}
       <div className="p-6 max-w-6xl mx-auto">
         <RoomTabs roomData={roomData} calendarRef={calendarRef} />
       </div>
     </div>
-
   );
 }
-
-

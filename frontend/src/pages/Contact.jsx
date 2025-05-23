@@ -27,17 +27,16 @@ export default function Contact() {
     setIsSending(true);
     setStatusMessage("Sending...");
 
-    // Your EmailJS Service ID, Template ID, and Public Key
-    const serviceID = "service_j2sur5t"; // This is your Service ID
-    const templateID = "template_3nt27xs"; // This is your Template ID
-    const userID = "7s3fyFXl9tvcHb_P8"; // This is your Public Key
+    const serviceID = "service_j2sur5t";
+    const templateID = "template_3nt27xs";
+    const userID = "7s3fyFXl9tvcHb_P8";
 
     emailjs
       .send(
-        serviceID, // Your Service ID
-        templateID, // Your Template ID
-        formData, // The form data to send
-        userID // Your Public Key
+        serviceID,
+        templateID,
+        formData,
+        userID
       )
       .then(
         (result) => {
@@ -58,13 +57,13 @@ export default function Contact() {
       <HeroSection
         title="Contact Us"
         subtitle="We’re here to help. Reach out with any questions or inquiries."
-        backgroundImage="/src/assets/heroImage.jpg"
+        backgroundImage="/heroImage.jpg"
       />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 py-16 flex flex-col lg:flex-row justify-between space-y-12 lg:space-y-0 lg:space-x-8">
         <div className="flex-1">
-          <h2 className="text-2xl mb-4 font-bold">Get In Touch</h2>
-          <p>
+          <h2 className="text-2xl mb-4 text-gray-800 font-bold">Get In Touch</h2>
+          <p className="text-justify text-gray-600">
             We’d love to hear from you! Whether you have questions about our
             menu, want to book a table, or need assistance with a special
             request, our team is here to help. Feel free to reach out via phone,
@@ -97,7 +96,7 @@ export default function Contact() {
                 value={formData.name}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border"
+                className="w-full px-4 py-2 border border-[#8E7037]"
               />
               <input
                 type="email"
@@ -107,7 +106,7 @@ export default function Contact() {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-full px-3 py-2 border"
+                className="w-full px-3 py-2 border border-[#8E7037]"
               />
             </div>
 
@@ -119,7 +118,7 @@ export default function Contact() {
               value={formData.subject}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border"
+              className="w-full px-3 py-2 border border-[#8E7037]"
             />
 
             <textarea
@@ -130,12 +129,12 @@ export default function Contact() {
               onChange={handleChange}
               required
               rows="6"
-              className="w-full px-3 py-2 border"
+              className="w-full px-3 py-2 border border-[#8E7037]"
             ></textarea>
 
             <button
               type="submit"
-              className="px-8 py-2 bg-[#8E7037] text-white hover:bg-white hover:text-[#8E7037] border-2 border-[#8E7037]"
+              className="px-8 py-2 bg-[#8E7037] text-white hover:bg-white hover:text-[#8E7037] border border-[#8E7037]"
             >
               {isSending ? "Sending..." : "Send"}
             </button>

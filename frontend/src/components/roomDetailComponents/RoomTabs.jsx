@@ -8,11 +8,13 @@ export default function RoomTabs({ roomData, calendarRef }) {
     const [relatedRooms, setRelatedRooms] = useState([]);
     const [activeTab, setActiveTab] = useState("overview");
     const { roomSlug } = useParams();
+    const baseUrl =
+        import.meta.env.MODE === "development" ? "http://localhost:5005" : "";
 
     useEffect(() => {
         const fetchRelatedRooms = async () => {
             try {
-                const res = await axios.get(`http://localhost:5005/room`);
+                const res = await axios.get(baseUrl + `/room`);
                 const filteredData = res.data.data.filter(
                     (value) => roomSlug !== value.slug
                 );
@@ -31,13 +33,13 @@ export default function RoomTabs({ roomData, calendarRef }) {
             label: "OVERVIEW",
             content: (
                 <>
-                    <p>{roomData.descOverview}</p>
+                    <p className="text-justify">{roomData.descOverview}</p>
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 pl-5 mt-4 text-gray-600">
                         <li><strong>SPECIAL ROOM</strong></li>
-                        <li><strong>Max:</strong> {roomData.additionalDetails.maxPersons} Person(s)</li>
-                        <li><strong>Size:</strong> {roomData.additionalDetails.size}</li>
-                        <li><strong>View:</strong> {roomData.additionalDetails.view}</li>
-                        <li><strong>Bed:</strong> {roomData.additionalDetails.bed}</li>
+                        <li><strong>Max:</strong> {roomData?.additionalDetails?.maxPersons} Person(s)</li>
+                        <li><strong>Size:</strong> {roomData?.additionalDetails?.size}</li>
+                        <li><strong>View:</strong> {roomData?.additionalDetails?.view}</li>
+                        <li><strong>Bed:</strong> {roomData?.additionalDetails?.bed}</li>
                     </ul>
                 </>
             ),
@@ -49,7 +51,7 @@ export default function RoomTabs({ roomData, calendarRef }) {
                 <>
                     <p className="text-gray-600 mb-4">Located in the heart of Aspen...</p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-                        {Object.entries(roomData.amenities).map(([roomType, items], idx) => (
+                        {roomData.amenities && Object.entries(roomData.amenities).map(([roomType, items], idx) => (
                             <div key={idx} className="mb-6">
                                 <h4 className="text-lg font-semibold text-gray-700">{roomType}</h4>
                                 <ul className="list-disc pl-5 text-gray-600">
@@ -57,6 +59,9 @@ export default function RoomTabs({ roomData, calendarRef }) {
                                 </ul>
                             </div>
                         ))}
+                        {!roomData.amenities && (
+                            <p className="text-gray-500 italic">No amenities listed for this room.</p>
+                        )}
                     </div>
                 </>
             ),
@@ -126,9 +131,9 @@ export default function RoomTabs({ roomData, calendarRef }) {
 
     return (
         <>
-            {/* Mobile View */}
+
             <div className="block md:hidden">
-                <div className="flex flex-col items-center space-y-2 mb-6">
+                <div className="flex flex-col items-center space-y-4 mb-6">
                     {tabs.map((tab) => (
                         <div key={tab.key}>
                             <button
@@ -144,7 +149,6 @@ export default function RoomTabs({ roomData, calendarRef }) {
                 </div>
             </div>
 
-            {/* Desktop View */}
             <div className="hidden md:grid md:grid-cols-5 gap-6 mt-10">
                 <div className="col-span-1 space-y-4 text-sm font-semibold">
                     {tabs.map((tab) => (

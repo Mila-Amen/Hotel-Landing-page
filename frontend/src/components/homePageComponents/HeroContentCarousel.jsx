@@ -11,7 +11,7 @@ const images = [
 
 export default function HeroContentCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const isPausedRef = useRef(false); // Ref to track pause state
+  const isPausedRef = useRef(false);
   const navigate = useNavigate()
 
   const nextSlide = () => {
@@ -27,7 +27,8 @@ export default function HeroContentCarousel() {
   };
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
-  //testin
+  const baseUrl =
+  import.meta.env.MODE === "development" ? "http://localhost:5005" : "";
   const handleCheckAvailability = async (e) => {
     e.preventDefault();
 
@@ -37,13 +38,13 @@ export default function HeroContentCarousel() {
     }
 
     try {
-      const response = await fetch(`http://localhost:5005/room/available?start=${checkIn}&end=${checkOut}`);
+      const response = await fetch(baseUrl + `/room/available?start=${checkIn}&end=${checkOut}`);
       const data = await response.json();
 
       if (data.success && data.data.length > 0) {
         console.log("Available Rooms:", data.data);
-        // Redirect to the room's details page and scroll to the calendar section
         const firstAvailableRoom = data.data[0];
+        console.log("First Room:", firstAvailableRoom); 
         navigate(`/rooms/${firstAvailableRoom.slug}#calendar`);
       } else {
         alert("No rooms available or something went wrong.");
@@ -54,7 +55,6 @@ export default function HeroContentCarousel() {
     }
   };
 
-  //testing
   useEffect(() => {
     const interval = setInterval(() => {
       if (!isPausedRef.current) {
@@ -71,7 +71,6 @@ export default function HeroContentCarousel() {
     <div className="relative w-full h-screen overflow-hidden z-0">
       <NavbarTop />
 
-      {/* Image Carousel */}
       <div
         className="flex transition-transform duration-700 ease-in-out h-full"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
@@ -85,87 +84,92 @@ export default function HeroContentCarousel() {
           />
         ))}
       </div>
-      <div className="absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-6 max-w-3xl w-full text-center text-white">
-        <p className="font-['Playfair_Display'] text-4xl sm:text-5xl lg:text-6xl p-5">
+      <div className="absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-6 max-w-3xl w-full text-center text-white lg:mt-15">
+        <p
+          className="font-['Playfair_Display'] text-4xl sm:text-5xl lg:text-6xl p-5"
+          style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.8)" }}
+        >
           Welcome to Royal Grand
         </p>
-        <p className="font-['Playfair_Display'] text-3xl sm:text-4xl lg:text-5xl p-5 ">
+        <p
+          className="font-['Playfair_Display'] text-3xl sm:text-4xl lg:text-5xl p-5"
+          style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.8)" }}
+        >
           Hotels & Resorts
         </p>
       </div>
 
-      {/* Booking Form */}
-      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white/80 p-6 shadow-lg max-w-6xl w-full">
-        <form className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
-          <div className="w-full">
+      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 -translate-y-1/4 md:-translate-y-12 sm:-translate-y-1/2 bg-white/80 p-6 shadow-lg max-w-6xl w-full">
+        <form className="grid grid-cols-2 gap-4 max-w-screen-sm sm:max-w-full mx-auto sm:grid-cols-2 lg:flex lg:items-center lg:justify-between lg:max-w-full">
+          <div className="sm:col-span-1 lg:flex-1 lg:min-w-[150px]">
             <label
               htmlFor="check-in"
-              className="text-[#8E7037] text-base sm:text-xl lg:text-2xl font-medium mb-2 flex items-center"
+              className="text-[#8E7037] text-sm sm:text-base md:text-lg lg:text-xl font-medium mb-2 flex items-center"
             >
-              <Calendar size={30} className="mr-2 text-gold" />
+              <Calendar className="mr-2 text-gold w-4 h-4 sm:w-6 sm:h-6 lg:w-[30px] lg:h-[30px]" />
               Check In
             </label>
             <input
               type="date"
               value={checkIn}
               onChange={(e) => setCheckIn(e.target.value)}
-              
-              className="w-full border border-[#8E7037] px-4 py-3 text-sm sm:text-base lg:text-xl text-gray-600"
+              className="w-full border border-[#8E7037] px-2 py-2 text-xs sm:text-sm md:text-base text-gray-600"
             />
           </div>
-          <div className="w-full">
+
+          <div className="sm:col-span-1 lg:flex-1 lg:min-w-[150px]">
             <label
               htmlFor="check-out"
-              className="text-[#8E7037] text-base sm:text-xl lg:text-2xl font-medium mb-2 flex items-center"
+              className="text-[#8E7037] text-sm sm:text-base md:text-lg lg:text-xl font-medium mb-2 flex items-center"
             >
-              <Calendar size={30} className="mr-2 text-gold" />
+              <Calendar className="mr-2 text-gold w-4 h-4 sm:w-6 sm:h-6 lg:w-[30px] lg:h-[30px]" />
               Check Out
             </label>
             <input
               type="date"
               value={checkOut}
               onChange={(e) => setCheckOut(e.target.value)}
-
-              className="w-full border border-[#8E7037] px-4 py-3 text-sm sm:text-base lg:text-xl text-gray-600"
+              className="w-full border border-[#8E7037] px-2 py-2 text-xs sm:text-sm md:text-base text-gray-600"
             />
           </div>
-          <div className="w-full">
+
+          <div className="sm:col-span-1 lg:flex-1 lg:min-w-[150px]">
             <label
-              htmlFor="guests"
-              className="text-[#8E7037] text-base sm:text-xl lg:text-2xl font-medium mb-2 flex items-center"
+              htmlFor="adults"
+              className="text-[#8E7037] text-sm sm:text-base md:text-lg lg:text-xl font-medium mb-2 flex items-center"
             >
-              <Users size={30} className="mr-2 text-gold" />
+              <Users className="mr-2 text-gold w-4 h-4 sm:w-6 sm:h-6 lg:w-[30px] lg:h-[30px]" />
               Adult
             </label>
             <input
               type="number"
               min="1"
-              className="w-full border border-[#8E7037] px-4 py-3 text-sm sm:text-base lg:text-xl text-gray-600"
+              className="w-full border border-[#8E7037] px-2 py-2 text-xs sm:text-sm md:text-base text-gray-600"
               defaultValue={1}
             />
           </div>
-          <div className="w-full">
+
+          <div className="sm:col-span-1 lg:flex-1 lg:min-w-[150px]">
             <label
-              htmlFor="guests"
-              className="text-[#8E7037] text-base sm:text-xl lg:text-2xl font-medium mb-2 flex items-center"
+              htmlFor="children"
+              className="text-[#8E7037] text-sm sm:text-base md:text-lg lg:text-xl font-medium mb-2 flex items-center"
             >
-              <Users size={30} className="mr-2 text-gold" />
+              <Users className="mr-2 text-gold w-4 h-4 sm:w-6 sm:h-6 lg:w-[30px] lg:h-[30px]" />
               Child
             </label>
             <input
               type="number"
               min="0"
-              className="w-full border border-[#8E7037] px-4 py-3 text-sm sm:text-base lg:text-xl text-gray-600"
+              className="w-full border border-[#8E7037] px-2 py-2 text-xs sm:text-sm md:text-base text-gray-600"
               defaultValue={0}
             />
           </div>
-          <div className="col-span-2 lg:col-span-1 w-full">
-            <button
-            /*   type="button" */
-              onClick={handleCheckAvailability}
 
+          <div className="col-span-2 lg:flex-1 lg:min-w-[150px]">
+            <button
+              onClick={handleCheckAvailability}
               type="submit"
-              className="w-full bg-[#8E7037] text-white text-xl sm:text-2xl lg:text-2xl px-4 py-2 border border-transparent hover:border-[#8E7037] hover:text-[#8E7037] hover:bg-white/80 transition"
+              className="w-full bg-[#8E7037] text-white text-sm sm:text-lg px-3 py-2 lg:px-7 lg:py-6 border border-transparent hover:border-[#8E7037] hover:text-[#8E7037] hover:bg-white transition"
             >
               Check Availability
             </button>
@@ -173,10 +177,9 @@ export default function HeroContentCarousel() {
         </form>
       </div>
 
-      {/* Prev & Next Buttons */}
       <button
         onClick={prevSlide}
-        className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-800 p-3 border border-white shadow-md hover:bg-white/75 transition hidden sm:block"
+        className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-800 p-3 border border-white shadow-md hover:bg-white/75 transition hidden lg:block"
       >
         <svg
           className="w-6 h-6 text-white"
@@ -195,7 +198,7 @@ export default function HeroContentCarousel() {
 
       <button
         onClick={nextSlide}
-        className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-800 p-3 border border-white shadow-md hover:bg-white/75 transition hidden sm:block"
+        className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-800 p-3 border border-white shadow-md hover:bg-white/75 transition hidden lg:block"
       >
         <svg
           className="w-6 h-6 text-white"
@@ -208,18 +211,18 @@ export default function HeroContentCarousel() {
         </svg>
       </button>
 
-      {/* Dot Indicators */}
       <div className="absolute bottom-6 w-full flex justify-center items-center gap-2">
         {images.map((_, index) => (
           <button
             key={index}
             onClick={() => goToSlide(index)}
-            className={`h-3 w-3 rounded-full transition-all duration-300 ${index === currentIndex ? "bg-[#8E7037] scale-125" : "bg-white/70"}`}
+            className={`h-3 w-3 rounded-full transition-all duration-300 ${
+              index === currentIndex ? "bg-[#8E7037] scale-125" : "bg-white/70"
+            }`}
           ></button>
         ))}
       </div>
 
-      {/* Pause Auto Slide on Navbar Hover */}
       <div
         className="absolute top-0 left-0 w-full h-20 z-10"
         onMouseEnter={() => (isPausedRef.current = true)}
